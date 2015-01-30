@@ -79,7 +79,10 @@ class LEDBackpack:
     "Updates the display memory"
     bytes = []
     for item in self.__buffer:
-      bytes.append(item & 0xFF)
+      upper = item & 0xFF
+      lsb = upper & 0x01
+      leds = (upper >> 1) | (lsb<<7)
+      bytes.append(leds)
       bytes.append((item >> 8) & 0xFF)
     self.i2c.writeList(0x00, bytes)
 
